@@ -23,6 +23,7 @@ type TrackData struct {
 	Results struct {
 		ID           json.Number `json:"SNG_ID"`
 		MD5Origin    json.Number `json:"PUID"`
+		FileSizeFLAC json.Number `json:"FILESIZE_FLAC"`
 		FileSize320  json.Number `json:"FILESIZE_MP3_320"`
 		FileSize256  json.Number `json:"FILESIZE_MP3_256"`
 		FileSize128  json.Number `json:"FILESIZE_MP3_128"`

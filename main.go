@@ -56,11 +56,14 @@ func GetUrlDownload(id string, client *http.Client) (string, string, *http.Clien
 	if err != nil {
 		return "", "", nil, &OnError{err, "Error during GetUrlDownload Unmarshalling"}
 	}
+	FileSizeFLAC, _ := jsonTrack.Results.FileSizeFLAC.Int64()
 	FileSize320, _ := jsonTrack.Results.FileSize320.Int64()
 	FileSize256, _ := jsonTrack.Results.FileSize256.Int64()
 	FileSize128, _ := jsonTrack.Results.FileSize128.Int64()
 	var format string
 	switch {
+    case FileSizeFLAC > 0:
+        format = "9"
 	case FileSize320 > 0:
 		format = "3"
 	case FileSize256 > 0:
@@ -70,12 +73,18 @@ func GetUrlDownload(id string, client *http.Client) (string, string, *http.Clien
 	default:
 		format = "8"
 	}
+    var ext string
+    if format == "9" {
+        ext = "flac"
+    } else {
+        ext = "mp3"
+    }
 	songID := jsonTrack.Results.ID.String()
 	md5Origin := jsonTrack.Results.MD5Origin.String()
 	mediaVersion := jsonTrack.Results.MediaVersion.String()
 	songTitle := jsonTrack.Results.SngTitle
 	artName := jsonTrack.Results.ArtName
-	FName := fmt.Sprintf("%s - %s.mp3", songTitle, artName)
+	FName := fmt.Sprintf("%s - %s.%s", songTitle, artName, ext)
 	debug("(md5Origin: %v) (songID: %v) (format: %v) (mediaVersion:%v)",
 		md5Origin, songID, format, mediaVersion)
 
