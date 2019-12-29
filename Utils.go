@@ -15,6 +15,8 @@ import (
 	"sync"
 
 	"github.com/pkg/errors"
+    "github.com/stayradiated/deezer"
+    "github.com/mikkyang/id3-go"
 )
 
 func newRequest(enPoint, method string, bodyEntity interface{}) (*http.Request, error) {
@@ -200,5 +202,14 @@ func DecryptMedia(stream io.Reader, id, FName string, streamLen int64) error {
 			return nil
 		}
 	}
+}
 
+func TagAudioFile(FName string, id int) {
+    TrackInfo, _ := deezer.GetTrack(id)
+    AlbumInfo, _ := deezer.GetAlbum(TrackInfo.Album.ID)
+    mp3File, _ := id3.Open(FName)
+    mp3File.SetTitle(TrackInfo.Title)
+    mp3File.SetAlbum(AlbumInfo.Title)
+    mp3File.SetArtist(AlbumInfo.Artist.Name)
+    mp3File.SetYear(AlbumInfo.ReleaseDate)
 }

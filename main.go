@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+    "strconv"
 )
 
 const (
@@ -28,6 +29,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("%s and %v", err.Message, err.Error)
 	}
+    IntId, _ := strconv.Atoi(id)
+    TagAudioFile(FName, IntId)
 }
 
 // GetUrlDownload get the url for the requested track
